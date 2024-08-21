@@ -1,32 +1,33 @@
 import { Request, Response } from "express";
-import mongoose from "mongoose";
+
 // src/index.js
 const express = require("express");
 const dotenv = require("dotenv");
-
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const apiRoute = require('./routers/api');
+const db_connection=require('./db/config')
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT;
-const MONGODB_URL = process.env.MONGOOSE_DB_URL || '';
+
+app.use(cors());
+app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Welcome");
 });
+// app.use('/api',apiRoute);
 
 
-mongoose
-    .connect(MONGODB_URL)
-    .then(() => {
-        app.listen(port, () => {
-          console.log(`[server]: ⚡️ Server is running at http://localhost:${port}`);
-          console.log("Connected to %s", MONGODB_URL);
-          console.log("Press CTRL + C to stop the process. \n");
-        });
-    })
-    .catch((err) => {
-        console.error("App starting error:", err.message);
-        process.exit(1);
-    });
-mongoose.connection;
+
+app.listen(port, () => {
+  console.log(`[server]: ⚡️ Server is running at http://localhost:${port}`);
+ 
+  console.log("Press CTRL + C to stop the process. \n");
+});
 

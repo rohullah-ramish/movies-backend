@@ -10,4 +10,4 @@ const schema = new Schema({
 });
 
 // `MovieModel`
-export const MovieModel = mongoose.model("Movie", schema);
+export const Movie = mongoose.model("Movie", schema);
