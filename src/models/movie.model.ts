@@ -6,7 +6,7 @@ const schema = new Schema({
   poster: { type: String, required: true },
   userId: { type: mongoose.Types.ObjectId, ref: "User", require: true },
   createdAt: { type: Date, default: Date.now() },
-  isDeleted: { type: Boolean, default: true },
+  isDeleted: { type: Boolean, default: false },
 });
 
 // `MovieModel`
