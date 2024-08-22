@@ -13,20 +13,22 @@ const app = express();
 const port = process.env.PORT;
 
 
-
+// database connection
 initDB()
 
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.get("/", (req: Request, res: Response) => {
-  res.send("Welcome");
-});
+
+
+// apis routes
 app.use('/api',apiRoute);
 
-
-
+// throw 404 if URL not found
+app.all("*", function (req:Request,res:Response) {
+  return res.send, "Page not found";
+});
 app.listen(port, () => {
   console.log(`[server]: ⚡️ Server is running at http://localhost:${port}`);
  
