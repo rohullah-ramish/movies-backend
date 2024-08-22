@@ -19,7 +19,7 @@ export const authenticateJWT = async (req: Request, res: Response, next: NextFun
         (req as any).user = decoded;
         next();
     } catch (error) {
-        console.error('Token verification failed:', error);
+        // console.error('Token verification failed:', error);
        return res.status(403).json({ message: 'Invalid or expired token' });
     }
 };

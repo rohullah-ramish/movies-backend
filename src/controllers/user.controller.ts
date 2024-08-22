@@ -3,6 +3,8 @@ import { User } from "../utils/interfaces/IUser";
 import userService from "../services/user.service";
 import verifyPassword from "./../middlewares/verifyPassword";
 import { generateToken } from "../middlewares/jwt";
+
+
 export const login = async (req: Request, res: Response) => {
   try {
     const user: User = {
@@ -11,7 +13,6 @@ export const login = async (req: Request, res: Response) => {
     };
     // Find the user by username
     const userAuth = await userService.getMany({ email: user.email });
-    console.log(userAuth);
     if (
       userAuth &&
       (await verifyPassword(user.password, userAuth[0].password))
@@ -20,13 +21,12 @@ export const login = async (req: Request, res: Response) => {
         userAuth[0]._id.toString(),
         userAuth[0].email
       );
-
-      res.status(200).json({ message: "Login successful", token });
       return res.status(200).json({ message: "Login successful", token });
     } else {
       return res.status(401).json({ message: "Invalid credentials" });
     }
   } catch (error) {
+    console.log("error",error)
     return res
       .status(500)
       .json({ message: "Internal Server Error", error: error });

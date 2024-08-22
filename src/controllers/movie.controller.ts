@@ -14,17 +14,31 @@ export const getMovieList = async (req: Request, res: Response) => {
         },
       ],
     };
+    // for default pagination
+    const { page = 1, limit = 10, search } = req.query;
+
     const list = await movieService.getMany(
       {
         userId: new Types.ObjectId(user.id),
         isDeleted: false,
+        title: { $regex: search || "", $options: "i" },
       },
-      options
+      options,
+      { page, limit }
     );
+    const total = await movieService.getDocumentCount({
+      userId: new Types.ObjectId(user.id),
+      isDeleted: false,
+    });
 
-    return res.status(200).json({ message: "list !", data: list });
+    return res.status(200).json({
+      message: "movies list !",
+      data: list,
+      total: Math.ceil(total.length / Number(limit)),
+      currentPage: page,
+      limit,
+    });
   } catch (error) {
-    console.log("err", error);
     return res
       .status(500)
       .json({ message: "Internal Server Error", error: error });
@@ -55,7 +69,7 @@ export const addMovie = async (req: Request, res: Response) => {
     };
     const createMovie = await movieService.create(body);
     if (createMovie) {
-      return res.status(200).json({ message: "addMovie !", createMovie });
+      return res.status(200).json({ message: "Movie Added !", createMovie });
     } else {
       return res
         .status(400)
@@ -109,7 +123,7 @@ export const updateMovie = async (req: Request, res: Response) => {
         poster: imageUrl,
       };
       const updated = await movieService.update(id, body);
-      return res.status(200).json({ message: "Movie found", data: updated });
+      return res.status(200).json({ message: "Movie Updated", data: updated });
     }
   } catch (error) {
     return res
@@ -122,7 +136,7 @@ export const deleteMovie = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const updated = await movieService.update(id, { isDeleted: true });
-    return res.status(200).json({ message: "Movie found", data: updated });
+    return res.status(200).json({ message: "Movie Deleted", data: updated });
   } catch (error) {
     return res
       .status(500)

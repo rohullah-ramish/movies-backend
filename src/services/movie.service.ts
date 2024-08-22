@@ -43,9 +43,11 @@ const update = async (
 };
 
 // Define a function to get many movies
-const getMany = async (findDto: any,  options: { population?: any[]; select?: any[] } = {}): Promise<any[]> => {
+const getMany = async (findDto: any,  options: { population?: any[]; select?: any[] } = {},pagination:{ limit?: any, page?: any }): Promise<any[]> => {
     const movies = await Movie.find(findDto, options.select || [])
         .populate(options.population || [])
+        .limit(pagination.limit * 1)
+        .skip((pagination.page - 1) * pagination.limit)
         .exec();
     if (!movies || movies.length === 0) {
         throw new Error('Movies not found');
@@ -61,6 +63,13 @@ const getById = async (movieId: string, options: { population?: string[] } = {})
     }
     return movie;
 };
-
-export default { movieExists, create, update, getMany, getById };
+const getDocumentCount = async (findDto: any): Promise<any[]> => {
+    const movies = await Movie.find(findDto)
+        .exec();
+    if (!movies || movies.length === 0) {
+        throw new Error('Movies not found');
+    }
+    return movies;
+};
+export default { movieExists, create, update, getMany, getById,getDocumentCount };
 
