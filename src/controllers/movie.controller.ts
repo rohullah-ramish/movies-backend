@@ -38,12 +38,16 @@ class MovieController {
         total: Math.ceil(total.length / Number(limit)),
         currentPage: page,
         limit,
-        success:true
+        success: true,
       });
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "Internal Server Error", error: error,success:false });
+        .json({
+          message: "Internal Server Error",
+          error: error,
+          success: false,
+        });
     }
   }
 
@@ -54,7 +58,9 @@ class MovieController {
       const file = req.file;
 
       if (!file) {
-        return res.status(400).json({ message: "No file uploaded" ,success:false});
+        return res
+          .status(400)
+          .json({ message: "No file uploaded", success: false });
       }
 
       // Upload to Cloudinary
@@ -71,17 +77,27 @@ class MovieController {
       };
       const createMovie = await MovieService.create(body);
       if (createMovie) {
-        return res.status(200).json({ message: "Movie Added !", createMovie ,success:true});
+        return res
+          .status(200)
+          .json({ message: "Movie Added !", createMovie, success: true });
       } else {
         return res
           .status(400)
-          .json({ message: "error for add movie !", createMovie ,success:false});
+          .json({
+            message: "error for add movie !",
+            createMovie,
+            success: false,
+          });
       }
     } catch (error) {
       console.log("err", error);
       return res
         .status(500)
-        .json({ message: "Internal Server Error", error: error ,success:false});
+        .json({
+          message: "Internal Server Error",
+          error: error,
+          success: false,
+        });
     }
   }
 
@@ -93,7 +109,9 @@ class MovieController {
       const movie = await MovieService.getById(id);
 
       if (!movie) {
-        return res.status(404).json({ message: "Movie not found",success:false });
+        return res
+          .status(404)
+          .json({ message: "Movie not found", success: false });
       }
       if (!file) {
         // simple updatte by mongose
@@ -105,7 +123,9 @@ class MovieController {
           poster,
         };
         const updated = await MovieService.update(id, body);
-        return res.status(200).json({ message: "Movie found", data: updated ,success:true});
+        return res
+          .status(200)
+          .json({ message: "Movie found", data: updated, success: true });
       } else {
         const oldPublicId = movie.poster.split("/").pop()?.split(".")[0];
         if (oldPublicId) {
@@ -127,12 +147,16 @@ class MovieController {
         const updated = await MovieService.update(id, body);
         return res
           .status(200)
-          .json({ message: "Movie Updated", data: updated ,success:true});
+          .json({ message: "Movie Updated", data: updated, success: true });
       }
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "Internal Server Error", error: error,success:false });
+        .json({
+          message: "Internal Server Error",
+          error: error,
+          success: false,
+        });
     }
   }
 
@@ -140,27 +164,37 @@ class MovieController {
     try {
       const { id } = req.params;
       const updated = await MovieService.update(id, { isDeleted: true });
-      return res.status(200).json({ message: "Movie Deleted", data: updated,success:true });
+      return res
+        .status(200)
+        .json({ message: "Movie Deleted", data: updated, success: true });
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "Internal Server Error", error: error ,success:false});
+        .json({
+          message: "Internal Server Error",
+          error: error,
+          success: false,
+        });
     }
   }
-
 
   static async getMovieDetails(req: Request, res: Response) {
     try {
       const { id } = req.params;
       const details = await MovieService.getById(id);
-      return res.status(200).json({ message: "Movie details", data: details,success:true });
+      return res
+        .status(200)
+        .json({ message: "Movie details", data: details, success: true });
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "Internal Server Error", error: error,success:false });
+        .json({
+          message: "Internal Server Error",
+          error: error,
+          success: false,
+        });
     }
   }
 }
 
 export default MovieController;
-

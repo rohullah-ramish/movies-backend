@@ -34,14 +34,25 @@ class UserController {
         );
         return res
           .status(200)
-          .json({ message: "Login successful", token, refersh_token,success:true });
+          .json({
+            message: "Login successful",
+            token,
+            refersh_token,
+            success: true,
+          });
       } else {
-        return res.status(401).json({ message: "Invalid credentials",success:false });
+        return res
+          .status(401)
+          .json({ message: "Invalid credentials", success: false });
       }
     } catch (error) {
       return res
         .status(500)
-        .json({ message: "Internal Server Error", error: error ,success:false});
+        .json({
+          message: "Internal Server Error",
+          error: error,
+          success: false,
+        });
     }
   }
 
@@ -60,15 +71,25 @@ class UserController {
         });
         return res
           .status(200)
-          .json({ message: "signup successfully", data: createUser,success:true });
+          .json({
+            message: "signup successfully",
+            data: createUser,
+            success: true,
+          });
       } else {
-        return res.status(200).json({ message: `This Email is already used`,success:false });
+        return res
+          .status(200)
+          .json({ message: `This Email is already used`, success: false });
       }
     } catch (error) {
       console.log("err", error);
       return res
         .status(500)
-        .json({ message: "Internal Server Error", error: error,success:false });
+        .json({
+          message: "Internal Server Error",
+          error: error,
+          success: false,
+        });
     }
   }
 
@@ -94,12 +115,21 @@ class UserController {
       }
       return res
         .status(200)
-        .json({ message: "token refersh", token, refersh_token,success:true });
+        .json({
+          message: "token refersh",
+          token,
+          refersh_token,
+          success: true,
+        });
     } catch (error) {
       console.log("error", error);
       return res
         .status(500)
-        .json({ message: "Internal Server Error", error: error ,success:false});
+        .json({
+          message: "Internal Server Error",
+          error: error,
+          success: false,
+        });
     }
   }
 }

@@ -1,11 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyToken } from './jwt';
+import { JwtPayload } from '../utils/interfaces/IJwt';
 
 
-interface JwtPayload {
-    id: string;
-    email: string;
-}
+
 
 export const authenticateJWT = async (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers['authorization']?.split(' ')[1]; // Bearer token
