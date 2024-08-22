@@ -7,7 +7,7 @@ import MovieController from "../controllers/movie.controller";
 const router = Router();
 
 router.get("/", authenticateJWT, MovieController.getAll);
-router.get("/:id", authenticateJWT, MovieController.getAll);
+router.get("/:id", authenticateJWT, MovieController.getMovieDetails);
 router.post("/", authenticateJWT, upload.single("poster"), MovieController.addMovie);
 router.patch("/:id", authenticateJWT, upload.single("poster"), MovieController.updateMovie);
 router.delete("/:id", authenticateJWT, MovieController.deleteMovie);
