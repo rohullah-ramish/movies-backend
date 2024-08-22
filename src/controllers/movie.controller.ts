@@ -41,7 +41,6 @@ class MovieController {
         success: true,
       });
     } catch (error) {
-      console.log("err",error)
       return res
         .status(500)
         .json({
