@@ -1,75 +1,83 @@
-import { Movie } from '../models/movie.model';
+import { Movie } from "../models/movie.model";
 
-// Define a function to check if a movie exists
-const movieExists = async (findDto: any): Promise<boolean> => {
+class MovieService {
+  static async moviesExists(findDto: any): Promise<boolean> {
     const movie = await Movie.findOne(findDto).exec(); // Ensure `.exec()` is used to return a promise
     return movie !== null;
-};
+  }
 
-// Define a function to create a movie
-const create = async (createDto: any): Promise<any> => {
+  static async create(createDto: any): Promise<any> {
     const movie = new Movie(createDto);
     return movie.save();
-};
+  }
 
-// Define a function to update a movie
-const update = async (
+  static async update(
     movieId: string,
     updateDto: any,
     options: {
-        lean?: boolean;
-        upsert?: boolean;
-        returnNew?: boolean;
-        population?: string[];
-        session?: any;
+      lean?: boolean;
+      upsert?: boolean;
+      returnNew?: boolean;
+      population?: string[];
+      session?: any;
     } = {},
     flatten: boolean = true
-): Promise<any | null> => {
+  ): Promise<any | null> {
     try {
-        const updatedMovie = await Movie.findByIdAndUpdate(
-            movieId,
-            flatten ? { $set: updateDto } : updateDto,
-            {
-                lean: options.lean || false,
-                upsert: options.upsert || false,
-                new: options.returnNew || true,
-                session: options.session
-            }
-        ).populate(options.population || []).exec();
-        return updatedMovie;
-    } catch (error) {
-        throw new Error('Problem in update');
-    }
-};
-
-// Define a function to get many movies
-const getMany = async (findDto: any,  options: { population?: any[]; select?: any[] } = {},pagination:{ limit?: any, page?: any }): Promise<any[]> => {
-    const movies = await Movie.find(findDto, options.select || [])
+      const updatedMovie = await Movie.findByIdAndUpdate(
+        movieId,
+        flatten ? { $set: updateDto } : updateDto,
+        {
+          lean: options.lean || false,
+          upsert: options.upsert || false,
+          new: options.returnNew || true,
+          session: options.session,
+        }
+      )
         .populate(options.population || [])
-        .limit(pagination.limit * 1)
-        .skip((pagination.page - 1) * pagination.limit)
         .exec();
+      return updatedMovie;
+    } catch (error) {
+      throw new Error("Problem in update");
+    }
+  }
+
+  static async getMany(
+    findDto: any,
+    options: { population?: any[]; select?: any[] } = {},
+    pagination: { limit?: any; page?: any }
+  ): Promise<any[]> {
+    const movies = await Movie.find(findDto, options.select || [])
+      .populate(options.population || [])
+      .limit(pagination.limit * 1)
+      .skip((pagination.page - 1) * pagination.limit)
+      .exec();
     if (!movies || movies.length === 0) {
-        throw new Error('Movies not found');
+      throw new Error("Movies not found");
     }
     return movies;
-};
+  }
 
-// Define a function to get a movie by ID
-const getById = async (movieId: string, options: { population?: string[] } = {}): Promise<any | null> => {
-    const movie = await Movie.findById(movieId).populate(options.population || []).exec();
+  static async getById(
+    movieId: string,
+    options: { population?: string[] } = {}
+  ): Promise<any | null> {
+    const movie = await Movie.findById(movieId)
+      .populate(options.population || [])
+      .exec();
     if (!movie) {
-        throw new Error('Movie not found');
+      throw new Error("Movie not found");
     }
     return movie;
-};
-const getDocumentCount = async (findDto: any): Promise<any[]> => {
-    const movies = await Movie.find(findDto)
-        .exec();
+  }
+
+  static async getDocumentCount(findDto: any): Promise<any[]> {
+    const movies = await Movie.find(findDto).exec();
     if (!movies || movies.length === 0) {
-        throw new Error('Movies not found');
+      throw new Error("Movies not found");
     }
     return movies;
-};
-export default { movieExists, create, update, getMany, getById,getDocumentCount };
+  }
+}
 
+export default MovieService;

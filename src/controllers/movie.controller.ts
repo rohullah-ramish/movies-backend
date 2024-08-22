@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import movieService from "../services/movie.service";
+import MovieService from "../services/movie.service";
 import cloudinary from "../db/cloudinary.config";
 import { Types } from "mongoose";
 
@@ -18,7 +18,7 @@ class MovieController {
       // for default pagination
       const { page = 1, limit = 10, search } = req.query;
 
-      const list = await movieService.getMany(
+      const list = await MovieService.getMany(
         {
           userId: new Types.ObjectId(user.id),
           isDeleted: false,
@@ -27,7 +27,7 @@ class MovieController {
         options,
         { page, limit }
       );
-      const total = await movieService.getDocumentCount({
+      const total = await MovieService.getDocumentCount({
         userId: new Types.ObjectId(user.id),
         isDeleted: false,
       });
@@ -69,7 +69,7 @@ class MovieController {
         publish_year,
         poster: imageUrl,
       };
-      const createMovie = await movieService.create(body);
+      const createMovie = await MovieService.create(body);
       if (createMovie) {
         return res.status(200).json({ message: "Movie Added !", createMovie ,success:true});
       } else {
@@ -90,7 +90,7 @@ class MovieController {
       const user = (req as any).user;
       const { id } = req.params;
       const file = req.file;
-      const movie = await movieService.getById(id);
+      const movie = await MovieService.getById(id);
 
       if (!movie) {
         return res.status(404).json({ message: "Movie not found",success:false });
@@ -104,7 +104,7 @@ class MovieController {
           publish_year,
           poster,
         };
-        const updated = await movieService.update(id, body);
+        const updated = await MovieService.update(id, body);
         return res.status(200).json({ message: "Movie found", data: updated ,success:true});
       } else {
         const oldPublicId = movie.poster.split("/").pop()?.split(".")[0];
@@ -124,7 +124,7 @@ class MovieController {
           publish_year,
           poster: imageUrl,
         };
-        const updated = await movieService.update(id, body);
+        const updated = await MovieService.update(id, body);
         return res
           .status(200)
           .json({ message: "Movie Updated", data: updated ,success:true});
@@ -139,7 +139,7 @@ class MovieController {
   static async deleteMovie(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const updated = await movieService.update(id, { isDeleted: true });
+      const updated = await MovieService.update(id, { isDeleted: true });
       return res.status(200).json({ message: "Movie Deleted", data: updated,success:true });
     } catch (error) {
       return res
@@ -152,7 +152,7 @@ class MovieController {
   static async getMovieDetails(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const details = await movieService.getById(id);
+      const details = await MovieService.getById(id);
       return res.status(200).json({ message: "Movie details", data: details,success:true });
     } catch (error) {
       return res
