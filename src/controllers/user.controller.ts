@@ -3,7 +3,7 @@ import { User } from "../utils/interfaces/IUser";
 import UserService from "../services/user.service";
 import verifyPassword from "./../middlewares/verifyPassword";
 import {
-  generateRefershToken,
+  generateRefreshToken,
   generateToken,
   verifyRefreshToken,
   verifyToken,
@@ -19,7 +19,7 @@ class UserController {
         password: req.body.password,
       };
       // Find the user by username
-      const userAuth = await UserService.getMany({ email: user.email});
+      const userAuth = await UserService.getMany({ email: user.email });
       if (
         userAuth &&
         (await verifyPassword(user.password, userAuth[0].password))
@@ -28,31 +28,27 @@ class UserController {
           userAuth[0]._id.toString(),
           userAuth[0].email
         );
-        const refersh_token = generateRefershToken(
+        const refresh_token = generateRefreshToken(
           userAuth[0]._id.toString(),
           userAuth[0].email
         );
-        return res
-          .status(200)
-          .json({
-            message: "Login successful",
-            token,
-            refersh_token,
-            success: true,
-          });
+        return res.status(200).json({
+          message: "Login successful",
+          token,
+          refresh_token,
+          success: true,
+        });
       } else {
         return res
           .status(401)
           .json({ message: "Invalid credentials", success: false });
       }
     } catch (error) {
-      return res
-        .status(500)
-        .json({
-          message: "Internal Server Error",
-          error: error,
-          success: false,
-        });
+      return res.status(500).json({
+        message: "Internal Server Error",
+        error: error,
+        success: false,
+      });
     }
   }
 
@@ -69,13 +65,11 @@ class UserController {
           email: user.email,
           password: hashPasswords,
         });
-        return res
-          .status(200)
-          .json({
-            message: "signup successfully",
-            data: createUser,
-            success: true,
-          });
+        return res.status(200).json({
+          message: "signup successfully",
+          data: createUser,
+          success: true,
+        });
       } else {
         return res
           .status(200)
@@ -83,53 +77,50 @@ class UserController {
       }
     } catch (error) {
       console.log("err", error);
-      return res
-        .status(500)
-        .json({
-          message: "Internal Server Error",
-          error: error,
-          success: false,
-        });
+      return res.status(500).json({
+        message: "Internal Server Error",
+        error: error,
+        success: false,
+      });
     }
   }
 
-  static async refershToken(req: Request, res: Response) {
+  static async refreshToken(req: Request, res: Response) {
     try {
-      const { token, refersh_token } = req.body;
+      const { token, refresh_token } = req.body;
       const decodedToken = (await verifyToken(token)) as JwtPayload;
-      const decodedRefershToken = (await verifyRefreshToken(
-        refersh_token
+      const decodedRefreshToken = (await verifyRefreshToken(
+        refresh_token
       )) as JwtPayload;
-      if (decodedToken.id == decodedRefershToken.id) {
+      if (decodedToken.id == decodedRefreshToken.id) {
         const userAuth = await UserService.getMany({
           email: decodedToken.email,
         });
-        const token = generateToken(
+        const tokenUpdated = generateToken(
           userAuth[0]._id.toString(),
           userAuth[0].email
         );
-        const refersh_token = generateRefershToken(
+        const refreshToken_updated = generateRefreshToken(
           userAuth[0]._id.toString(),
           userAuth[0].email
         );
-      }
-      return res
-        .status(200)
-        .json({
-          message: "token refersh",
-          token,
-          refersh_token,
+        return res.status(200).json({
+          message: "token refresh",
+          token: tokenUpdated,
+          refresh_token: refreshToken_updated,
           success: true,
         });
+      } else {
+        return res
+          .status(404)
+          .json({ message: "In-Valid User", success: false });
+      }
     } catch (error) {
-      console.log("error", error);
-      return res
-        .status(500)
-        .json({
-          message: "Internal Server Error",
-          error: error,
-          success: false,
-        });
+      return res.status(500).json({
+        message: "Internal Server Error",
+        error: error,
+        success: false,
+      });
     }
   }
 }

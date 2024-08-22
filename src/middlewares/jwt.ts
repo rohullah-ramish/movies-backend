@@ -23,7 +23,7 @@ export const verifyToken = (token: string): Promise<JwtPayload> => {
   });
 };
 
-export const generateRefershToken = (userId: string, email: string): string => {
+export const generateRefreshToken = (userId: string, email: string): string => {
   const payload: JwtPayload = { id: userId, email };
   return jwt.sign(payload, JWT_REFRESH_SECRET);
 };

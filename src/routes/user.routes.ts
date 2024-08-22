@@ -5,6 +5,6 @@ const router = Router();
 
 router.post("/login", UserController.login);
 router.post("/signup", UserController.signup);
-router.post("/refersh-token", UserController.refershToken);
+router.post("/refresh-token", UserController.refreshToken);
 
 module.exports = router;
