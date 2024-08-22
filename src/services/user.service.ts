@@ -48,9 +48,6 @@ class UserService {
     const users = await User.find(findDto, options.select || [])
       .populate(options.population || [])
       .exec();
-    if (!users || users.length === 0) {
-      throw new Error("Users not found");
-    }
     return users;
   }
   static async getById(
@@ -60,9 +57,6 @@ class UserService {
     const user = await User.findById(userId)
       .populate(options.population || [])
       .exec();
-    if (!user) {
-      throw new Error("User not found");
-    }
     return user;
   }
 }

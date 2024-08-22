@@ -52,9 +52,6 @@ class MovieService {
       .limit(pagination.limit * 1)
       .skip((pagination.page - 1) * pagination.limit)
       .exec();
-    if (!movies || movies.length === 0) {
-      throw new Error("Movies not found");
-    }
     return movies;
   }
 
@@ -73,9 +70,6 @@ class MovieService {
 
   static async getDocumentCount(findDto: any): Promise<any[]> {
     const movies = await Movie.find(findDto).exec();
-    if (!movies || movies.length === 0) {
-      throw new Error("Movies not found");
-    }
     return movies;
   }
 }
