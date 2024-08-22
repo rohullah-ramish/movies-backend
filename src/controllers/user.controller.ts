@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { User } from "../utils/interfaces/IUser";
-import userService from "../services/user.service";
+import UserService from "../services/user.service";
 import verifyPassword from "./../middlewares/verifyPassword";
 import {
   generateRefershToken,
@@ -19,7 +19,7 @@ class UserController {
         password: req.body.password,
       };
       // Find the user by username
-      const userAuth = await userService.getMany({ email: user.email });
+      const userAuth = await UserService.getMany({ email: user.email });
       if (
         userAuth &&
         (await verifyPassword(user.password, userAuth[0].password))
@@ -51,10 +51,10 @@ class UserController {
         email: req.body.email,
         password: req.body.password, // Already hashed by middleware
       };
-      const isUserExist = await userService.userExists({ email: user.email });
+      const isUserExist = await UserService.userExists({ email: user.email });
       if (!isUserExist) {
         const hashPasswords = await hashPassword(user.password);
-        const createUser = await userService.create({
+        const createUser = await UserService.create({
           email: user.email,
           password: hashPasswords,
         });
@@ -80,7 +80,7 @@ class UserController {
         refersh_token
       )) as JwtPayload;
       if (decodedToken.id == decodedRefershToken.id) {
-        const userAuth = await userService.getMany({
+        const userAuth = await UserService.getMany({
           email: decodedToken.email,
         });
         const token = generateToken(
