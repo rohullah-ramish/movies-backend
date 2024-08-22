@@ -2,9 +2,8 @@ import mongoose from "mongoose";
 
 const MONGODB_URL = process.env.MONGOOSE_DB_URL || "";
 
-// TODO: Convert to async-await
-export const initDB = () => {
-  mongoose
+export const initDB = async () => {
+  return await mongoose
     .connect(MONGODB_URL)
     .then(() => {
       console.log("Connected to %s", MONGODB_URL);

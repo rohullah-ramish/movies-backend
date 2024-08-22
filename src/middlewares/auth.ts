@@ -11,7 +11,7 @@ export const authenticateJWT = async (req: Request, res: Response, next: NextFun
     const token = req.headers['authorization']?.split(' ')[1]; // Bearer token
 
     if (!token) {
-        return res.status(401).json({ message: 'Access token is missing' });
+        return res.status(401).json({ message: 'Access token is missing',success:false });
     }
     try {
         const decoded = await verifyToken(token) as JwtPayload;
@@ -20,6 +20,6 @@ export const authenticateJWT = async (req: Request, res: Response, next: NextFun
         next();
     } catch (error) {
         // console.error('Token verification failed:', error);
-       return res.status(403).json({ message: 'Invalid or expired token' });
+       return res.status(403).json({ message: 'Invalid or expired token',success:false });
     }
 };
