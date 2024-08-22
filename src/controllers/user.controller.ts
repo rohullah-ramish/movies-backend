@@ -19,7 +19,7 @@ class UserController {
         password: req.body.password,
       };
       // Find the user by username
-      const userAuth = await UserService.getMany({ email: user.email });
+      const userAuth = await UserService.getMany({ email: user.email});
       if (
         userAuth &&
         (await verifyPassword(user.password, userAuth[0].password))
