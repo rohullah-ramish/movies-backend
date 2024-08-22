@@ -3,6 +3,14 @@ import movieService from "../services/movie.service";
 import cloudinary from "../db/cloudinary.config";
 import { Types } from "mongoose";
 
+// class MovieService {
+//   static async getAll(req: Request, res: Response) {
+
+//   }
+// }
+
+// export default MovieService
+
 export const getMovieList = async (req: Request, res: Response) => {
   try {
     const user = (req as any).user;

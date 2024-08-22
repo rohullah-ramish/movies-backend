@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
-const dotenv = require("dotenv");
-dotenv.config();
+
 const MONGODB_URL = process.env.MONGOOSE_DB_URL || "";
 
+// TODO: Convert to async-await
 export const initDB = () => {
   mongoose
     .connect(MONGODB_URL)
