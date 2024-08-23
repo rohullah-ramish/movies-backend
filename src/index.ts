@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // apis routes
-app.use("/api", apiRoute);
+app.use("/", apiRoute);
 
 // throw 404 if URL not found
 app.all("*", function (req: Request, res: Response) {
