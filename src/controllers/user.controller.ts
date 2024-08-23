@@ -9,7 +9,7 @@ import {
   verifyToken,
 } from "../middlewares/jwt";
 import hashPassword from "../middlewares/hashPassword";
-import { JwtPayload } from "../utils/interfaces/IJwt";
+import { JwtPayload, JwtRefreshPayload } from "../utils/interfaces/IJwt";
 
 class UserController {
   static async login(req: Request, res: Response) {
@@ -30,7 +30,7 @@ class UserController {
         );
         const refresh_token = generateRefreshToken(
           userAuth[0]._id.toString(),
-          userAuth[0].email
+          userAuth[0].version
         );
         return res.status(200).json({
           message: "Login successful",
@@ -87,27 +87,25 @@ class UserController {
 
   static async refreshToken(req: Request, res: Response) {
     try {
-      const { token, refresh_token } = req.body;
-      const decodedToken = (await verifyToken(token)) as JwtPayload;
+      const { refresh_token } = req.body;
       const decodedRefreshToken = (await verifyRefreshToken(
         refresh_token
-      )) as JwtPayload;
-      if (decodedToken.id == decodedRefreshToken.id) {
-        const userAuth = await UserService.getMany({
-          email: decodedToken.email,
-        });
+      )) as JwtRefreshPayload;
+      const userAuth = await UserService.getMany({
+        _id: decodedRefreshToken.id,
+      });
+      if (
+        userAuth[0].id == decodedRefreshToken.id &&
+        userAuth[0].version == decodedRefreshToken.version
+      ) {
         const tokenUpdated = generateToken(
-          userAuth[0]._id.toString(),
-          userAuth[0].email
-        );
-        const refreshToken_updated = generateRefreshToken(
           userAuth[0]._id.toString(),
           userAuth[0].email
         );
         return res.status(200).json({
           message: "token refresh",
           token: tokenUpdated,
-          refresh_token: refreshToken_updated,
+          refresh_token,
           success: true,
         });
       } else {

@@ -1,4 +1,4 @@
-import { JwtPayload } from "../utils/interfaces/IJwt";
+import { JwtPayload, JwtRefreshPayload } from "../utils/interfaces/IJwt";
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config();
@@ -23,18 +23,21 @@ export const verifyToken = (token: string): Promise<JwtPayload> => {
   });
 };
 
-export const generateRefreshToken = (userId: string, email: string): string => {
-  const payload: JwtPayload = { id: userId, email };
+export const generateRefreshToken = (
+  userId: string,
+  version: number
+): string => {
+  const payload: JwtRefreshPayload = { id: userId, version };
   return jwt.sign(payload, JWT_REFRESH_SECRET);
 };
 
-export const verifyRefreshToken = (token: string): Promise<JwtPayload> => {
+export const verifyRefreshToken = (token: string): Promise<JwtRefreshPayload> => {
   return new Promise((resolve, reject) => {
-    jwt.verify(token, JWT_REFRESH_SECRET, (err: any, decoded: JwtPayload) => {
+    jwt.verify(token, JWT_REFRESH_SECRET, (err: any, decoded: JwtRefreshPayload) => {
       if (err) {
         return reject(err);
       }
-      resolve(decoded as JwtPayload);
+      resolve(decoded as JwtRefreshPayload);
     });
   });
 };

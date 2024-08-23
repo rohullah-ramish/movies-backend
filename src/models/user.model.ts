@@ -5,6 +5,7 @@ const schema = new Schema({
   password: { type: String, required: true },
   createdAt: { type: Date, default: Date.now() },
   isDeleted: { type: Boolean, default: false },
+  version: { type: Number, default: 1 },
 });
 
 // `UserModel`
