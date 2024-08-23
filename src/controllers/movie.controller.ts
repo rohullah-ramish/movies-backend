@@ -6,7 +6,7 @@ import { Types } from "mongoose";
 class MovieController {
   static async getAll(req: Request, res: Response) {
     try {
-      const user = (req as any).user;
+      // const user = (req as any).user;
       const options = {
         population: [
           {
@@ -18,7 +18,7 @@ class MovieController {
       // for default pagination
       const { page = 1, limit = 10, search, year } = req.query;
       const filter: { [key: string]: any } = {
-        userId: new Types.ObjectId(user.id),
+        // userId: new Types.ObjectId(user.id),
         isDeleted: false,
       };
 
@@ -30,7 +30,7 @@ class MovieController {
       }
       const list = await MovieService.getMany(filter, options, { page, limit });
       const total = await MovieService.getDocumentCount({
-        userId: new Types.ObjectId(user.id),
+        // userId: new Types.ObjectId(user.id),
         isDeleted: false,
       });
 
@@ -173,10 +173,10 @@ class MovieController {
   static async getMovieDetails(req: Request, res: Response) {
     try {
       const { id } = req.params;
-      const user = (req as any).user;
+      // const user = (req as any).user;
       const details = await MovieService.getSingle({
         _id: id,
-        userId: user.id,
+        // userId: user.id,
       });
       return res
         .status(200)
