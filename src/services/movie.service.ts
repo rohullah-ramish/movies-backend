@@ -55,17 +55,14 @@ class MovieService {
     return movies;
   }
 
-  static async getById(
-    movieId: string,
-    options: { population?: string[] } = {}
+  static async getSingle(
+    findDto: any,
+    options: { population?: any[]; select?: any[] } = {},
   ): Promise<any | null> {
-    const movie = await Movie.findById(movieId)
-      .populate(options.population || [])
-      .exec();
-    if (!movie) {
-      throw new Error("Movie not found");
-    }
-    return movie;
+    const movies = await Movie.find(findDto, options.select || [])
+    .populate(options.population || [])
+    .exec();
+  return movies;
   }
 
   static async getDocumentCount(findDto: any): Promise<any[]> {
