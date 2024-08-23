@@ -21,8 +21,8 @@ class UserController {
       // Find the user by username
       const userAuth = await UserService.getMany({ email: user.email });
       if (
-        userAuth &&
-        (await verifyPassword(user.password, userAuth[0].password))
+        userAuth.length > 0 &&
+        (await verifyPassword(user.password, userAuth[0]?.password))
       ) {
         const token = generateToken(
           userAuth[0]._id.toString(),
@@ -44,6 +44,7 @@ class UserController {
           .json({ message: "Invalid credentials", success: false });
       }
     } catch (error) {
+      console.log("error", error);
       return res.status(500).json({
         message: "Internal Server Error",
         error: error,
