@@ -26,7 +26,13 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use(
+  "/docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    explorer: true,
+  })
+);
 
 // Docs in JSON format
 app.get("/docs.json", (req: Request, res: Response) => {
@@ -47,5 +53,4 @@ app.listen(port, async () => {
   console.log("Press CTRL + C to stop the process. \n");
 
   // await swaggerDocs(app, port || "3000");
-
 });
