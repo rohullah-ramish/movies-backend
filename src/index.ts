@@ -2,6 +2,10 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 import { Request, Response } from "express";
+// import swaggerDocs from "./utils/swagger";
+import swaggerJsdoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
+import { swaggerSpec } from "./utils/swagger";
 
 // src/index.js
 const express = require("express");
@@ -22,6 +26,14 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// Docs in JSON format
+app.get("/docs.json", (req: Request, res: Response) => {
+  res.setHeader("Content-Type", "application/json");
+  res.send(swaggerSpec);
+});
+
 // apis routes
 app.use("/", apiRoute);
 
@@ -29,8 +41,11 @@ app.use("/", apiRoute);
 app.all("*", function (req: Request, res: Response) {
   return res.send, "Page not found";
 });
-app.listen(port, () => {
+app.listen(port, async () => {
   console.log(`[server]: ⚡️ Server is running at http://localhost:${port}`);
 
   console.log("Press CTRL + C to stop the process. \n");
+
+  // await swaggerDocs(app, port || "3000");
+
 });
