@@ -5,7 +5,7 @@ import { Request, Response } from "express";
 
 // src/index.js
 const express = require("express");
-
+const logger = require("morgan");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const apiRoute = require("./routes/main.routes");
@@ -16,7 +16,7 @@ const port = process.env.PORT;
 
 // database connection
 initDB();
-
+app.use(logger("dev"));
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
