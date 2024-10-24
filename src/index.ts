@@ -39,6 +39,17 @@ app.use(
   })
 );
 
+app.use(
+  "/docs/",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, {
+    explorer: true,
+    swaggerOptions: {
+      url: '/docs.json', // Ensure this matches your JSON route
+    },
+  })
+);
+
 // Docs in JSON format
 app.get("/docs.json", (req: Request, res: Response) => {
   res.setHeader("Content-Type", "application/json");
