@@ -2,8 +2,6 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 import { Request, Response } from "express";
-// import swaggerDocs from "./utils/swagger";
-import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./utils/swagger";
 
@@ -21,7 +19,7 @@ const port = process.env.PORT;
 // database connection
 initDB();
 
-//  setup
+// 
 app.use(logger("dev"));
 app.use(cors());
 app.use(express.json());
@@ -35,13 +33,12 @@ app.use(
   swaggerUi.serve,
   swaggerUi.setup(swaggerSpec, {
     explorer: true,
+    swaggerOptions: {
+      url: '/docs.json', // Ensure this matches your JSON route
+    },
   })
 );
 
-
-app.get("/api/docs", (req: Request, res: Response) => {
-  res.redirect("/docs");
-});
 // Docs in JSON format
 app.get("/docs.json", (req: Request, res: Response) => {
   res.setHeader("Content-Type", "application/json");
