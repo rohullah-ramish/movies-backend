@@ -31,6 +31,7 @@ class MovieController {
       const list = await MovieService.getMany(filter, options, { page, limit });
       const total = await MovieService.getDocumentCount({
         // userId: new Types.ObjectId(user.id),
+        ...filter,
         isDeleted: false,
       });
 

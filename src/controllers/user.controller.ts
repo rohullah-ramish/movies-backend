@@ -59,6 +59,7 @@ class UserController {
         email: req.body.email,
         password: req.body.password, // Already hashed by middleware
       };
+      console.log(">>> creating user");
       const isUserExist = await UserService.userExists({ email: user.email });
       if (!isUserExist) {
         const hashPasswords = await hashPassword(user.password);
