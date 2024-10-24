@@ -38,6 +38,10 @@ app.use(
   })
 );
 
+
+app.get("/api/docs", (req: Request, res: Response) => {
+  res.redirect("/docs");
+});
 // Docs in JSON format
 app.get("/docs.json", (req: Request, res: Response) => {
   res.setHeader("Content-Type", "application/json");
