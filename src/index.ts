@@ -20,12 +20,16 @@ const port = process.env.PORT;
 
 // database connection
 initDB();
+
+//  setup
 app.use(logger("dev"));
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+
+// swagger api docs 
 app.use(
   "/docs",
   swaggerUi.serve,
@@ -39,7 +43,7 @@ app.get("/docs.json", (req: Request, res: Response) => {
   res.setHeader("Content-Type", "application/json");
   res.send(swaggerSpec);
 });
-// app.use(helmet());
+
 // apis routes
 app.use("/", apiRoute);
 
