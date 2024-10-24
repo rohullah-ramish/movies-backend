@@ -57,6 +57,4 @@ app.listen(port, async () => {
   console.log(`[server]: ⚡️ Server is running at http://localhost:${port}`);
 
   console.log("Press CTRL + C to stop the process. \n");
-
-  // await swaggerDocs(app, port || "3000");
 });

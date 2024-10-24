@@ -1,7 +1,6 @@
-import { Express, Request, Response } from "express";
 import path from "path";
 import swaggerJsdoc from "swagger-jsdoc";
-import swaggerUi from "swagger-ui-express";
+
 
 
 const options: swaggerJsdoc.Options = {
