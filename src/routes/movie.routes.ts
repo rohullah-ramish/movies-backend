@@ -18,12 +18,32 @@ const router = Router();
  *   get:
  *     summary: Get all movies
  *     tags: [Movies]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         required: false
+ *         schema:
+ *           type: integer
+ *         description: The page number to retrieve.
+ *       - in: query
+ *         name: limit
+ *         required: false
+ *         schema:
+ *           type: integer
+ *         description: The number of movies to return per page.
+ *       - in: query
+ *         name: search
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: A search term to filter movies by title or description.
  *     responses:
  *       200:
  *         description: A list of movies
  *       500:
  *         description: Internal server error
  */
+
 router.get("/", MovieController.getAll);
 
 /**
