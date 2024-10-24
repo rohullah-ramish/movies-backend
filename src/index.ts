@@ -28,16 +28,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 
 // swagger api docs 
-app.use(
-  "/docs",
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerSpec, {
-    explorer: true,
-    swaggerOptions: {
-      url: '/docs.json', // Ensure this matches your JSON route
-    },
-  })
-);
 
 app.use(
   "/docs/",

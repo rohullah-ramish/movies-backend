@@ -15,6 +15,11 @@ const options: swaggerJsdoc.Options = {
             name: 'Rahollah Ramish'
         },
     },
+    servers: [
+      {
+        url: 'http://ec2-3-27-227-155.ap-southeast-2.compute.amazonaws.com/api', // Update to your deployed API base URL
+      },
+    ],
     components: {
       securitySchemes: {
         bearerAuth: {
